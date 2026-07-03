@@ -2,8 +2,13 @@ const { Client, GatewayIntentBits, Collection } = require('discord.js');
 const fs = require('fs');
 const path = require('path');
 
-// إعداد البوت مع الصلاحيات الضرورية
-const client = new Client({ intents: [GatewayIntentBits.Guilds, GatewayIntentBits.GuildMessages, GatewayIntentBits.MessageContent] });
+const client = new Client({ 
+    intents: [
+        GatewayIntentBits.Guilds, 
+        GatewayIntentBits.GuildMessages, 
+        GatewayIntentBits.MessageContent
+    ] 
+});
 
 client.commands = new Collection();
 
@@ -18,12 +23,11 @@ for (const file of commandFiles) {
 }
 
 client.once('ready', () => {
-    console.log(`البوت شغال يا وحش باسم: ${client.user.tag}`);
+    console.log(`البوت شغال بأمان يا معتز باسم: ${client.user.tag}`);
 });
 
-// تشغيل الأوامر
 client.on('messageCreate', async message => {
-    if (!message.content.startsWith('!') || message.author.bot) return; // غير '!' بالبادئة (prefix) التي تستخدمها
+    if (!message.content.startsWith('!') || message.author.bot) return;
 
     const args = message.content.slice(1).trim().split(/ +/);
     const commandName = args.shift().toLowerCase();
@@ -34,9 +38,9 @@ client.on('messageCreate', async message => {
         client.commands.get(commandName).execute(message, args);
     } catch (error) {
         console.error(error);
-        message.reply('في خطأ في تنفيذ الأمر!');
+        message.reply('خطأ في تنفيذ الأمر!');
     }
 });
 
-// ضع التوكن الخاص بك هنا بدلاً من هذه الجملة
-client.login("MTUyMjI0MDQ1MDU1ODQyNzMyOA.G11o54.U5fgc05dKL2AZ2YtXDrZrO3KvJ2srjYTxhl0Dk");
+// هنا السر: لا تضع التوكن هنا، اتركها كما هي ليقرأها من موقع Railway
+client.login(process.env.TOKEN);
