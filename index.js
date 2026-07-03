@@ -17,19 +17,22 @@ const commandsPath = path.join(__dirname, 'commands');
 const commandFiles = fs.readdirSync(commandsPath).filter(file => file.endsWith('.js'));
 
 for (const file of commandFiles) {
-    const filePath = path.join(commandsPath, file);
+    const filePath = path.join(__dirname, 'commands', file);
     const command = require(filePath);
     client.commands.set(command.name, command);
 }
 
 client.once('ready', () => {
     console.log(`البوت شغال بأمان يا معتز باسم: ${client.user.tag}`);
+    client.user.setPresence({ status: 'online' });
 });
 
 client.on('messageCreate', async message => {
-    if (!message.content.startsWith('!') || message.author.bot) return;
+    // البادئة الجديدة SH مع جعلها غير حساسة لحالة الأحرف
+    if (!message.content.toUpperCase().startsWith('SH') || message.author.bot) return;
 
-    const args = message.content.slice(1).trim().split(/ +/);
+    // بما أن SH حرفان، قمنا بتغيير الـ slice إلى 2
+    const args = message.content.slice(2).trim().split(/ +/);
     const commandName = args.shift().toLowerCase();
 
     if (!client.commands.has(commandName)) return;
@@ -38,9 +41,9 @@ client.on('messageCreate', async message => {
         client.commands.get(commandName).execute(message, args);
     } catch (error) {
         console.error(error);
-        message.reply('خطأ في تنفيذ الأمر!');
+        message.reply('حدث خطأ أثناء تنفيذ هذا الأمر!');
     }
 });
 
-// هنا السر: لا تضع التوكن هنا، اتركها كما هي ليقرأها من موقع Railway
+// التوكن يُسحب من إعدادات Railway (الـ Variables)
 client.login(process.env.TOKEN);
