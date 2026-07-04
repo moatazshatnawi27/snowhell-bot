@@ -9,4 +9,4 @@ module.exports = {
         const embed = new EmbedBuilder().setTitle(`🎁 ${prize}`).setDescription(`● **Ends:** <t:${Math.floor(endTime.getTime() / 1000)}:R>`);
         message.channel.send({ embeds: [embed] }).then(msg => msg.react('🎉'));
     }
-};س
+};
